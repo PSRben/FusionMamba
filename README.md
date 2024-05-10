@@ -1,4 +1,4 @@
-# FusionMamba: Efficient Image Fusion with State Space Model
+# FusionMamba
 - Code for the paper: "FusionMamba: Efficient Image Fusion with State Space Model", 2024.
 
 - First application of the state space model (SSM) in the hyper-spectral pansharpening and hyper-spectral image super-resolution (HISR) tasks.

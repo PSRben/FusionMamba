@@ -12,10 +12,10 @@ For a detailed understanding of our method, please refer to the paper: [FusionMa
 # Get Started
 ## Dataset
 - Datasets for pansharpening: [PanCollection](https://github.com/liangjiandeng/PanCollection). 
-We recommend downloading the dataset in h5py format.
+We recommend downloading the datasets in h5py format.
 
 - Datasets for hyper-spectral pansharpening: [HyperPanCollection](https://github.com/liangjiandeng/HyperPanCollection).
-We recommend downloading the dataset in h5py format.
+We recommend downloading the datasets in h5py format.
 
 - Dataset for HISR: the CAVE dataset. You can find this dataset on the Internet.
 
@@ -25,7 +25,7 @@ We recommend downloading the dataset in h5py format.
 git clone https://github.com/PSRben/FusionMamba.git
 ```
 
-2. Install the Mamba implementation by following the instructions in the Mamba-block folder.
+2. Install the Mamba implementation by following the instructions in the Mamba-block directory.
 
 3. Install other packages:
 ```
@@ -35,7 +35,7 @@ pip install einops h5py opencv-python torchinfo scipy numpy
 ## Usage
 - This repository is only for the pansharpening task.
 
-- The model weight trained on the WV3 dataset for 400 epochs can be found in the weights dir.
+- The model weights trained on the WV3 dataset for 400 epochs can be found in the weights directory.
 
 ```
 # train

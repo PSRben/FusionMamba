@@ -12,10 +12,10 @@ For a detailed understanding of our method, please refer to the paper: [FusionMa
 # Get Started
 ## Dataset
 - Datasets for pansharpening: [PanCollection](https://github.com/liangjiandeng/PanCollection). 
-We recommend downloading the datasets in h5py format.
+We recommend downloading datasets in the h5py format.
 
 - Datasets for hyper-spectral pansharpening: [HyperPanCollection](https://github.com/liangjiandeng/HyperPanCollection).
-We recommend downloading the datasets in h5py format.
+We recommend downloading datasets in the h5py format.
 
 - Dataset for HISR: the CAVE dataset. You can find this dataset on the Internet.
 

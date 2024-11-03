@@ -3,6 +3,7 @@ import torch.nn as nn
 from torchinfo import summary
 import torch.nn.functional as F
 from model.fusion_mamba import FusionMamba
+from mamba_ssm.modules.mamba_simple import Mamba
 
 
 class ResBlock2D(nn.Module):
@@ -33,7 +34,7 @@ class PixelShuffle(nn.Module):
 
 
 class Up(nn.Module):
-    def __init__(self, in_channels, out_channels, scale, upsample='default'):
+    def __init__(self, in_channels, out_channels, scale, upsample='default', combine='add'):
         super().__init__()
         if upsample == 'bilinear':
             self.up = nn.Sequential(
@@ -61,14 +62,26 @@ class Up(nn.Module):
                 nn.ConvTranspose2d(in_channels, out_channels, scale, scale, 0),
                 nn.LeakyReLU()
             )
-        self.conv = nn.Sequential(
-            nn.Conv2d(out_channels, out_channels, 3, 1, 1),
-            nn.LeakyReLU()
-        )
+        if combine == 'concat':
+            self.conv = nn.Sequential(
+                nn.Conv2d(out_channels * 2, out_channels * 2, 3, 1, 1, groups=out_channels*2),
+                nn.Conv2d(out_channels * 2, out_channels, 1, 1, 0),
+                nn.LeakyReLU()
+                )
+        else:
+            self.conv = nn.Sequential(
+                nn.Conv2d(out_channels, out_channels, 3, 1, 1, groups=out_channels),
+                nn.Conv2d(out_channels, out_channels, 1, 1, 0),
+                nn.LeakyReLU()
+                )
+        self.combine = combine
 
     def forward(self, x1, x2):
         x1 = self.up(x1)
-        x = x1 + x2
+        if self.combine == 'concat':
+            x = torch.cat([x1, x2], dim=1)
+        else:
+            x = x1 + x2
         return self.conv(x)
 
 
@@ -115,6 +128,36 @@ class Stage(nn.Module):
             return pan, ms
 
 
+class SpeAttention(nn.Module):
+    def __init__(self, spe_channels, se_ratio=8, mode='mamba', channels=32):
+        super().__init__()
+        
+        self.mode = mode
+        self.pooling = nn.AdaptiveMaxPool2d((1, 1))
+        if mode == 'mamba':
+            self.block = nn.Sequential(
+                nn.Linear(1, channels),
+                nn.LayerNorm(channels),
+                Mamba(channels, expand=1, d_state=8, bimamba_type='v2', if_devide_out=True, use_norm=True),
+                nn.Linear(channels, 1)
+            )
+        else:
+            self.block = nn.Sequential(
+                nn.Conv2d(spe_channels, spe_channels // se_ratio, 1, 1, 0, bias=False),
+                nn.LeakyReLU(),
+                nn.Conv2d(spe_channels // se_ratio, spe_channels, 1, 1, 0, bias=False),
+            )
+        self.sigmoid = nn.Sigmoid()
+
+    def forward(self, input):
+        input = self.pooling(input)
+        if self.mode == 'mamba':
+            output = self.block(input.squeeze(-1)).unsqueeze(-1)
+        else:
+            output = self.block(input)
+        return self.sigmoid(output)
+
+
 class U2Net(nn.Module):
     def __init__(self, dim, pan_dim, ms_dim, H=64, W=64, scale=4):
         super().__init__()
@@ -144,9 +187,12 @@ class U2Net(nn.Module):
         self.stage1 = Stage(dim1, dim2, H//2, W//2, sample_mode='down')
         self.stage2 = Stage(dim2, dim1, H//4, W//4, sample_mode='up')
         self.stage3 = Stage(dim1, dim0, H//2, W//2, sample_mode='up')
-        self.stage4 = FusionMamba(dim0, H, W)
+        self.stage4 = FusionMamba(dim0, H, W, final=True)
+
+        self.spe_attn = SpeAttention(ms_dim, 16, 'mamba', dim)
 
     def forward(self, ms, pan):
+        lrms = ms
         ms = self.upsample(ms)
         skip = ms
         pan = self.raise_pan_dim(pan)
@@ -157,7 +203,9 @@ class U2Net(nn.Module):
         pan, ms, pan_skip1, ms_skip1 = self.stage1(pan, ms)
         pan, ms = self.stage2(pan, ms, pan_skip1, ms_skip1)
         pan, ms = self.stage3(pan, ms, pan_skip0, ms_skip0)
-        _, ms = self.stage4(pan, ms)
+        output = self.stage4(pan, ms)
 
-        output = self.to_hrms(ms) + skip
+        spe_attn = self.spe_attn(lrms)
+
+        output = self.to_hrms(output) * spe_attn + skip
         return output

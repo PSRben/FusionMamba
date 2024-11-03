@@ -8,8 +8,11 @@ from utils.load_test_data import load_h5py_with_hp
 
 
 def test(args):
+    cut_size = args.cut_size
+    pad = args.pad
+    
     # load data
-    model = Net(args.channels, args.spa_channels, args.spe_channels, H=136, W=136).to(args.device).eval()
+    model = Net(args.channels, args.spa_channels, args.spe_channels, H=cut_size + 2 * pad, W=cut_size + 2 * pad).to(args.device).eval()
     weight = torch.load(args.weight)
 
     try: 
@@ -26,9 +29,7 @@ def test(args):
     # get size
     image_num, C, h, w = ms.shape
     _, _, H, W = pan.shape
-    cut_size = 128  # must be divided by 4, we recommand 128
     ms_size = cut_size // 4
-    pad = 4  # must be divided by 4
     edge_H = (cut_size - (H - (H // cut_size) * cut_size)) % cut_size
     edge_W = (cut_size - (W - (W // cut_size) * cut_size)) % cut_size
 
@@ -60,6 +61,8 @@ def test(args):
                         sr[:, :, pad: cut_size + pad, pad: cut_size + pad] * 2047.
             output = output[:, :, :H, :W]
             output = torch.squeeze(output).permute(1, 2, 0).cpu().detach().numpy()  # HxWxC
+            if not os.path.exists(args.save_dir):
+                os.makedirs(args.save_dir)
             save_name = os.path.join(args.save_dir, "output_mulExm_" + str(k) + ".mat")
             sio.savemat(save_name, {'sr': output})
 
@@ -69,9 +72,11 @@ if __name__ == '__main__':
     parser.add_argument('--channels', type=int, default=32, help='Feature channels')
     parser.add_argument('--spa_channels', type=int, default=1, help='Feature channels')
     parser.add_argument('--spe_channels', type=int, default=8, help='Feature channels')
+    parser.add_argument('--cut_size', type=int, default=256, help='cut size')
+    parser.add_argument('--pad', type=int, default=0, help='padding size')
     parser.add_argument('--file_path', type=str, default='', help='Absolute path of the test file (in h5 format).')
     parser.add_argument('--save_dir', type=str, default='', help='Absolute path of the save dir.')
-    parser.add_argument('--weight', type=str, default='weights/400.pth', help='Path of the weight.')
+    parser.add_argument('--weight', type=str, default='weights/420.pth', help='Path of the weight.')
     parser.add_argument('--device', type=str, default='cuda')
     args = parser.parse_args()
     test(args)

@@ -45,8 +45,9 @@ class CrossMambaBlock(nn.Module):
 
 
 class FusionMamba(nn.Module):
-    def __init__(self, dim, H, W, depth=1):
+    def __init__(self, dim, H, W, depth=1, final=False):
         super().__init__()
+        self.final = final
         self.spa_mamba_layers = nn.ModuleList([])
         self.spe_mamba_layers = nn.ModuleList([])
         for _ in range(depth):
@@ -69,4 +70,7 @@ class FusionMamba(nn.Module):
         pan = rearrange(pan, 'b (h w) c -> b c h w', h=h, w=w)
         ms = rearrange(ms, 'b (h w) c -> b c h w', h=h, w=w)
         output = rearrange(fusion, 'b (h w) c -> b c h w', h=h, w=w)
-        return pan, ms + output
+        if self.final:
+            return output
+        else:
+            return (pan + output) / 2, (ms + output) /2

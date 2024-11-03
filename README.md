@@ -6,8 +6,8 @@
 - State-of-the-art (SOTA) performance in pansharpening, hyper-spectral pansharpening, and HISR tasks.
 
 # Paper
-For a detailed understanding of our method, please refer to the paper: [FusionMamba: Efficient Image Fusion with State Space Model](https://arxiv.org/abs/2404.07932).
-
+- For a detailed understanding of our method, please refer to the arxiv version of this paper: [FusionMamba: Efficient Image Fusion with State Space Model](https://arxiv.org/abs/2404.07932).
+- This paper has been accepted by the IEEE Transactions on Geoscience and Remote Sensing.
 
 # Get Started
 ## Dataset

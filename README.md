@@ -9,6 +9,19 @@
 - For a detailed understanding of our method, please refer to the paper: [FusionMamba: Efficient Remote Sensing Image Fusion with State Space Model](https://arxiv.org/abs/2404.07932).
 - This paper has been published in the IEEE Transactions on Geoscience and Remote Sensing (TGRS).
 
+# Method
+## FusionMamba Block
+
+![FusionMamba](images/fmamba.jpg#pic_center)
+
+We expand the single-input Mamba block to accommodate dual inputs, creating the FusionMamba block, which can serve as a plug-and-play solution for information integration.
+
+## Experimental Results
+
+![Pansharpening](images/results.jpg#pic_center)
+
+![HPansharpening](images/results2.jpg#pic_center)
+
 # Get Started
 ## Dataset
 - Datasets for pansharpening: [PanCollection](https://github.com/liangjiandeng/PanCollection). We recommend downloading datasets in the h5py format. The testing toolbox can be found [here](https://github.com/liangjiandeng/DLPan-Toolbox).

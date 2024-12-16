@@ -1,5 +1,5 @@
 # FusionMamba
-- Code for the paper: "FusionMamba: Efficient Remote Sensing Image Fusion with State Space Model", 2024.
+- Code for the paper: "FusionMamba: Efficient Remote Sensing Image Fusion with State Space Model", TGRS, 2024.
 
 - First application of the state space model (SSM) in the hyper-spectral pansharpening and hyper-spectral image super-resolution (HISR) tasks.
 
@@ -7,7 +7,7 @@
 
 # Paper
 - For a detailed understanding of our method, please refer to the paper: [FusionMamba: Efficient Remote Sensing Image Fusion with State Space Model](https://arxiv.org/abs/2404.07932).
-- This paper has been published in the IEEE Transactions on Geoscience and Remote Sensing.
+- This paper has been published in the IEEE Transactions on Geoscience and Remote Sensing (TGRS).
 
 # Get Started
 ## Dataset

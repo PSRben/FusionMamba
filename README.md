@@ -1,18 +1,17 @@
 # FusionMamba
-- Code for the paper: "FusionMamba: Efficient Image Fusion with State Space Model", 2024.
+- Code for the paper: "FusionMamba: Efficient Remote Sensing Image Fusion with State Space Model", 2024.
 
 - First application of the state space model (SSM) in the hyper-spectral pansharpening and hyper-spectral image super-resolution (HISR) tasks.
 
 - State-of-the-art (SOTA) performance in pansharpening, hyper-spectral pansharpening, and HISR tasks.
 
 # Paper
-- For a detailed understanding of our method, please refer to the arxiv version of this paper: [FusionMamba: Efficient Image Fusion with State Space Model](https://arxiv.org/abs/2404.07932).
-- This paper has been accepted by the IEEE Transactions on Geoscience and Remote Sensing.
+- For a detailed understanding of our method, please refer to the paper: [FusionMamba: Efficient Remote Sensing Image Fusion with State Space Model](https://arxiv.org/abs/2404.07932).
+- This paper has been published in the IEEE Transactions on Geoscience and Remote Sensing.
 
 # Get Started
 ## Dataset
-- Datasets for pansharpening: [PanCollection](https://github.com/liangjiandeng/PanCollection). 
-We recommend downloading datasets in the h5py format.
+- Datasets for pansharpening: [PanCollection](https://github.com/liangjiandeng/PanCollection). We recommend downloading datasets in the h5py format. The testing toolbox can be found [here](https://github.com/liangjiandeng/DLPan-Toolbox).
 
 - Datasets for hyper-spectral pansharpening: [HyperPanCollection](https://github.com/liangjiandeng/HyperPanCollection).
 We recommend downloading datasets in the h5py format.
@@ -46,14 +45,15 @@ python test.py --file_path ./path_to_data/name.h5 --save_dir ./path_to_dir --wei
 
 # Citation
 ```
-@misc{peng2024fusionmamba,
-      title={FusionMamba: Efficient Image Fusion with State Space Model}, 
-      author={Siran Peng and Xiangyu Zhu and Haoyu Deng and Zhen Lei and Liang-Jian Deng},
-      year={2024},
-      eprint={2404.07932},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV}
-}
+@ARTICLE{10750233,
+  author={Peng, Siran and Zhu, Xiangyu and Deng, Haoyu and Deng, Liang-Jian and Lei, Zhen},
+  journal={IEEE Transactions on Geoscience and Remote Sensing}, 
+  title={FusionMamba: Efficient Remote Sensing Image Fusion With State Space Model}, 
+  year={2024},
+  volume={62},
+  number={},
+  pages={1-16},
+  doi={10.1109/TGRS.2024.3496073}}
 ```
 
 # Contact

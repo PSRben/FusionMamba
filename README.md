@@ -31,6 +31,8 @@ We recommend downloading datasets in the h5py format.
 
 - Dataset for HISR: the CAVE dataset. You can find this dataset on the Internet.
 
+- Results for FusionMamba and a serious of methods on PanCollection: https://pan.baidu.com/s/1ARGLyvGKn57-eCl041Gk3g, key: 6271.
+
 ## Installation
 1. Clone the repository:
 ```
@@ -71,3 +73,4 @@ python test.py --file_path ./path_to_data/name.h5 --save_dir ./path_to_dir --wei
 
 # Contact
 We are glad to hear from you. If you have any questions, please feel free to contact siran_peng@163.com.
+
